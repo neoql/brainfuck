@@ -51,8 +51,8 @@ int bf_load(bf_State *BF, FILE *f) {
 	Node *node = BF->code;
 	delList(node->next);
 	node->next = NULL;
-	while (!feof(f)) {
-		symbol = (char)fgetc(f);
+	while ((symbol = (char)fgetc(f)) != EOF) {
+		;
 		switch (symbol) {
 			case '>':
 			case '<':
@@ -65,10 +65,12 @@ int bf_load(bf_State *BF, FILE *f) {
 				node->next = newNode(symbol, node);
 				node = node->next;
 				break;
+			case '\n':
+			case ' ':
+				break;
 			default:
 				return -1;
 		}
-
 	}
 	return 0;
 }
